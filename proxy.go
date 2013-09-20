@@ -72,7 +72,7 @@ func infoPage(notice string) string {
 			"<ul><li>payload:JSON body</li><li>URL: url of git repo</li>"+
 			"<li>START: Start commit hash</li><li>END: End commit hash</li>"+
 			"<li>REFNAME: Ref name</li></ul></p>"+
-			"<p>To use, add this to your Gitlab webook: http://[listen_url]?url=[proxy_url]</p>"+
+			"<p>To use, add this to your Gitlab webook: http://[proxy_listen_url]?url=[target_url]</p>"+
 			"<p><strong>Notice: %v</strong></p></html></body>",
 		notice)
 }
