@@ -62,6 +62,21 @@ func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
 	return err
 }
 
+func infoPage(notice string) string {
+	return fmt.Sprintf(
+		"<html><body><h1>githookproxy</h1>"+
+			"<p>Proxy takes JSON body in the format of: </p>"+
+			"<p><a href='http://grab.by/qrKw'/>Gitlab Webhook</a></p>"+
+			"<p>It will converts it to parameters and will post to url specified by 'url' param.</p>"+
+			"<p>Parameters will include:"+
+			"<ul><li>payload:JSON body</li><li>URL: url of git repo</li>"+
+			"<li>START: Start commit hash</li><li>END: End commit hash</li>"+
+			"<li>REFNAME: Ref name</li></ul></p>"+
+			"<p>To use, add this to your Gitlab webook: http://[listen_url]?url=[proxy_url]</p>"+
+			"<p><strong>Notice: %v</strong></p></html></body>",
+		notice)
+}
+
 func proxyHandlerFunc(w http.ResponseWriter, r *http.Request) {
 	if *logp {
 		log.Println(r.URL)
@@ -72,14 +87,12 @@ func proxyHandlerFunc(w http.ResponseWriter, r *http.Request) {
 	var gitData commitData
 	err := decoder.Decode(&gitData)
 
-	log.Printf("Body is: %v\n", body)
-
 	if err != nil {
 		log.Print(err)
-		fmt.Fprintf(w, "JSON body not found!")
+		fmt.Fprintf(w, infoPage("JSON body not found or invalid!"))
 	} else if r.FormValue("url") == "" {
 		log.Print("URL not found!")
-		fmt.Fprintf(w, "URL not found!")
+		fmt.Fprintf(w, infoPage("URL not found!"))
 	} else {
 		form := make(url.Values)
 		setGitData(form, gitData)
