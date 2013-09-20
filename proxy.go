@@ -73,7 +73,8 @@ func infoPage(notice string) string {
 			"<li>START: Start commit hash</li><li>END: End commit hash</li>"+
 			"<li>REFNAME: Ref name</li></ul></p>"+
 			"<p>To use, add this to your Gitlab webook: http://[proxy_listen_url]?url=[target_url]</p>"+
-			"<p><strong>Notice: %v</strong></p></html></body>",
+			"<p><strong>Notice: %v</strong></p>"+
+			"<p>Code: <a href='https://github.com/akira/githookproxy'>Github</a></html></body>",
 		notice)
 }
 
