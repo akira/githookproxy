@@ -45,7 +45,7 @@ func setGitData(form url.Values, g commitData) {
 	form.Set("START", g.Before)
 	form.Set("END", g.After)
 	form.Set("REFNAME", g.Ref)
-	form.Set("URL", g.Repository.Url)
+	form.Set("GITURL", g.Repository.Url)
 }
 
 func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
