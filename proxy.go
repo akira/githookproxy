@@ -36,9 +36,8 @@ func main() {
 func readerToString(r io.Reader) string {
 	if b, err := ioutil.ReadAll(r); err == nil {
 		return string(b)
-	} else {
-		return ""
-	}
+	} 
+	return ""
 }
 
 func setGitData(form url.Values, g commitData) {
