@@ -18,11 +18,11 @@ This will generate a 'proxy' executable.
 
 To run the proxy:
 
-    proxy -listen <listen address>
+    ./proxy -listen <listen address>
 
 For Example:
 
-    proxy -list 127.0.0.1:9999
+    ./proxy -list 127.0.0.1:9999
 
 ## To use proxy
 
