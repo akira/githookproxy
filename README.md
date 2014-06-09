@@ -22,7 +22,7 @@ To run the proxy:
 
 For Example:
 
-    ./proxy -list 127.0.0.1:9999
+    ./proxy -listen 127.0.0.1:9999
 
 ## To use proxy
 
