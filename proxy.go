@@ -44,12 +44,19 @@ func setGitData(form url.Values, g commitData) {
 	form.Set("START", g.Before)
 	form.Set("END", g.After)
 	form.Set("REFNAME", g.Ref)
+	
+	refToWork := g.Ref
+	s := strings.Split(refToWork, "/");
+	log.Printf("Tag is : %v\n", s[2])
+	
+	form.Set("TAG_NAME", s[2])
 	form.Set("GITURL", g.Repository.Url)
 }
 
 func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
 	resp, err := http.PostForm(url, form)
 	log.Printf("Posting to: %v\n", url)
+	log.Printf("Posting to: %v\n", form)
 
 	if err != nil {
 		log.Print(err)
@@ -96,7 +103,7 @@ func proxyHandlerFunc(w http.ResponseWriter, r *http.Request) {
 	} else {
 		form := make(url.Values)
 		setGitData(form, gitData)
-		form.Set("payload", body)
+		form.Set("PAYLOAD", body)
 
 		postUrl := r.FormValue("url")
 		proxyToEndpoint(postUrl, form, w)
