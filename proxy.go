@@ -29,7 +29,12 @@ var (
 
 func main() {
 	flag.Parse()
-	proxyHandler := http.HandlerFunc(proxyHandlerFunc)
+
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+    client := &http.Client{Transport: tr}
+	proxyHandler := client.HandlerFunc(proxyHandlerFunc)
 	log.Fatal(http.ListenAndServe(*listen, proxyHandler))
 }
 
