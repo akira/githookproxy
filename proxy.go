@@ -10,6 +10,7 @@ import (
 	"io"
 	"io/ioutil"
 	"encoding/json"
+	"crypto/tls"	
 )
 
 type commitData struct {
@@ -29,12 +30,7 @@ var (
 
 func main() {
 	flag.Parse()
-
-	tr := &http.Transport{
-        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-    }
-    client := &http.Client{Transport: tr}
-	proxyHandler := client.HandlerFunc(proxyHandlerFunc)
+	proxyHandler := http.HandlerFunc(proxyHandlerFunc)
 	log.Fatal(http.ListenAndServe(*listen, proxyHandler))
 }
 
@@ -59,7 +55,12 @@ func setGitData(form url.Values, g commitData) {
 }
 
 func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
-	resp, err := http.PostForm(url, form)
+
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+    client := &http.Client{Transport: tr}
+	resp, err := client.PostForm(url, form)
 	log.Printf("Posting to: %v\n", url)
 	log.Printf("Posting to: %v\n", form)
 
