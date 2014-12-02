@@ -42,16 +42,16 @@ func readerToString(r io.Reader) string {
 }
 
 func setGitData(form url.Values, g commitData) {
-	form.Set("START", g.Before)
-	form.Set("END", g.After)
-	form.Set("REFNAME", g.Ref)
+	form.Set("before", g.Before)
+	form.Set("after", g.After)
+	form.Set("ref", g.Ref)
 	
 	refToWork := g.Ref
 	s := strings.Split(refToWork, "/");
 	log.Printf("Tag is : %v\n", s[2])
 	
-	form.Set("TAG_NAME", s[2])
-	form.Set("GITURL", g.Repository.Url)
+	form.Set("tag_name", s[2])
+	form.Set("git_url", g.Repository.Url)
 }
 
 func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
