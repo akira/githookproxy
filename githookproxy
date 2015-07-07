@@ -1,0 +1,20 @@
+#!/bin/bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+SCRIPTNAME="$(basename $0)"
+
+# Get options
+while getopts "i:l:p:" option; do
+   case $option in
+      i)      LISTEN=$OPTARG ;;
+      l)      LOGFILE=$OPTARG ;;
+      p)      PIDFILE=$OPTARG ;;
+      *)      exit 1 ;;
+   esac
+done
+
+LISTEN=${LISTEN:-"localhost:9999"}
+LOGFILE=${LOGFILE:-"/var/log/$SCRIPTNAME.log"}
+PIDFILE=${PIDFILE:-"/var/run/$SCRIPTNAME.pid"}
+
+$DIR/proxy -listen $LISTEN -log=true >>$LOGFILE 2>&1 & echo $! >$PIDFILE
