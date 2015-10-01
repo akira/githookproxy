@@ -17,8 +17,15 @@ type commitData struct {
 	After      string
 	Ref        string
 	UserName   string
+	Object_Kind string
 	Repository struct {
-		Url string
+		Url  string
+		Name string
+	}
+	Object_Attributes struct {
+		Source_Branch string
+		Target_Branch string
+		State         string
 	}
 }
 
@@ -45,6 +52,11 @@ func setGitData(form url.Values, g commitData) {
 	form.Set("END", g.After)
 	form.Set("REFNAME", g.Ref)
 	form.Set("GITURL", g.Repository.Url)
+	form.Set("REPOSITORY_NAME", g.Repository.Name)
+	form.Set("OBJECT_KIND", g.Object_Kind)
+	form.Set("SOURCE_BRANCH", g.Object_Attributes.Source_Branch)
+	form.Set("TARGET_BRANCH", g.Object_Attributes.Target_Branch)
+	form.Set("STATE", g.Object_Attributes.State)
 }
 
 func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
