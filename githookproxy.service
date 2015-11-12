@@ -1,0 +1,20 @@
+# Write this file to /etc/systemd/system/githookproxy.service
+# Add the new service (as root): systemctl daemon-reload
+# Start service (as root): service githookproxy start
+# Status of service: service githookproxy status
+
+[Unit]
+Description=GitHookProxy
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=simple
+User=stratio
+EnvironmentFile=/etc/githookproxy.cfg
+WorkingDirectory=/usr/local/share/githookproxy
+ExecStart=/usr/local/share/githookproxy/proxy -listen $LISTEN -log=true
+Restart=on-failure
+LimitNOFILE=10000
+
+[Install]
+WantedBy=multi-user.target
