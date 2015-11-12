@@ -10,6 +10,7 @@ import (
 	"io"
 	"io/ioutil"
 	"encoding/json"
+	"crypto/tls"	
 )
 
 type commitData struct {
@@ -41,15 +42,27 @@ func readerToString(r io.Reader) string {
 }
 
 func setGitData(form url.Values, g commitData) {
-	form.Set("START", g.Before)
-	form.Set("END", g.After)
-	form.Set("REFNAME", g.Ref)
-	form.Set("GITURL", g.Repository.Url)
+	form.Set("before", g.Before)
+	form.Set("after", g.After)
+	form.Set("ref", g.Ref)
+	
+	refToWork := g.Ref
+	s := strings.Split(refToWork, "/");
+	log.Printf("Tag is : %v\n", s[2])
+	
+	form.Set("tag_name", s[2])
+	form.Set("git_url", g.Repository.Url)
 }
 
 func proxyToEndpoint(url string, form url.Values, w http.ResponseWriter) error {
-	resp, err := http.PostForm(url, form)
+
+	tr := &http.Transport{
+        TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+    }
+    client := &http.Client{Transport: tr}
+	resp, err := client.PostForm(url, form)
 	log.Printf("Posting to: %v\n", url)
+	log.Printf("Posting to: %v\n", form)
 
 	if err != nil {
 		log.Print(err)
@@ -96,7 +109,7 @@ func proxyHandlerFunc(w http.ResponseWriter, r *http.Request) {
 	} else {
 		form := make(url.Values)
 		setGitData(form, gitData)
-		form.Set("payload", body)
+		form.Set("PAYLOAD", body)
 
 		postUrl := r.FormValue("url")
 		proxyToEndpoint(postUrl, form, w)
