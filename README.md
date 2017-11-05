@@ -38,4 +38,8 @@ The proxy will take the webhook request, and translate it to a request to the ta
 - START: Start commit hash
 - END: End commit hash
 - REFNAME: Ref name
-
+- REPOSITORY_NAME: the repository name only (example: `myrepo` when repository URL is `git@github.com:myname/myrepo.git`)
+- OBJECT_KIND: `tag_push`, `push`, `merge_request`, `issue` or `note`
+- STATE: only sent in `merge_request`, `issue` and `note` hooks
+- SOURCE_BRANCH: only sent in merge requests
+- TARGET_BRANCH: only sent in merge requests
